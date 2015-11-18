@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="rldev.eshop.entity.Customer" table="customers" schema="eshop">
+        <id name="id">
+            <generator class="native"/>
+        </id>
+        <property name="username" unique="true"/>
+        <property name="password"/>
+        <property name="address"/>
+        <property name="firstName"/>
+        <property name="lastName"/>
+        <property name="phoneNumber"/>
+
+        <set name="orders" inverse="true">
+            <key column="customer_id"/>
+            <one-to-many class="rldev.eshop.entity.Order"/>
+        </set>
+
+        <set name="roles" lazy="false">
+            <key column="user_id"/>
+            <one-to-many class="rldev.eshop.entity.UserRole"/>
+        </set>
+    </class>
+
+    <class name="rldev.eshop.entity.UserRole" table="user_roles" schema="eshop">
+        <id name="id">
+            <generator class="native"/>
+        </id>
+        <property name="role" not-null="true"/>
+        <many-to-one name="user" column="user_id" fetch="select"/>
+    </class>
+
+    <class name="rldev.eshop.entity.Order" table="orders" schema="eshop">
+        <id name="id">
+            <generator class="native"/>
+        </id>
+        <timestamp name="creationDate" access="field" column="UPDATE_DATE"/>
+        <property name="totalCost"/>
+        <property name="orderStatus" column="order_status">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">rldev.eshop.entity.enums.OrderStatus</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+
+        <many-to-one name="customer" column="customer_id"/>
+
+        <list name="items" table="order_items" schema="eshop">
+            <key column="order_id"/>
+            <list-index column="order_item_id"/>
+            <composite-element class="rldev.eshop.entity.OrderItem">
+                <property name="quantity"/>
+                <many-to-one name="product" column="product_id"/>
+            </composite-element>
+        </list>
+    </class>
+
+    <class name="rldev.eshop.entity.Product" table="products" schema="eshop">
+        <id name="id">
+            <generator class="native"/>
+        </id>
+        <property name="brandName"/>
+        <property name="name"/>
+        <property name="description"/>
+        <property name="price"/>
+    </class>
+</hibernate-mapping>
