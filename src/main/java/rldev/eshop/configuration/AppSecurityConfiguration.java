@@ -3,6 +3,7 @@ package rldev.eshop.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,16 +16,23 @@ import rldev.eshop.controller.LoginBean;
 import rldev.eshop.service.CustomerDetailsService;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
+import javax.sql.DataSource;
+
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class AppSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired private CustomerDetailsService customerDetailsService;
+    @Autowired private DataSource dataSource;
 
     //@Autowired
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(customerDetailsService);
+        /*auth.jdbcAuthentication().dataSource(dataSource).
+                usersByUsernameQuery("select username, password from eshop.customers where username=?").
+                authoritiesByUsernameQuery("select username, role from eshop.user_roles where username=?");*/
     }
 
     @Override
@@ -35,13 +43,14 @@ public class AppSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
+                .usernameParameter("username")
+                .passwordParameter("password")
                 .loginPage("/pages/login.xhtml")
                 .permitAll()
                 .and()
                 .logout()
                 .permitAll().and().csrf().disable();
 
-        //http.csrf();
     }
 
     @Bean(name = "authenticationManager")

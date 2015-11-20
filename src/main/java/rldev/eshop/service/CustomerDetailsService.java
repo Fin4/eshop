@@ -14,30 +14,36 @@ import rldev.eshop.dao.CustomerDAO;
 import rldev.eshop.entity.Customer;
 import rldev.eshop.entity.UserRole;
 
-import javax.faces.bean.ManagedProperty;
 import java.util.HashSet;
 import java.util.Set;
 
 @Service("customerDetailsService")
+//@Transactional(readOnly = true)
 public class CustomerDetailsService implements UserDetailsService {
 
     @Autowired
     private CustomerDAO customerDAO;
 
+
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
 
         Customer customer = customerDAO.findByUsername(s);
 
-        Set<UserRole> roles = customer.getRoles();
+        //Set<UserRole> roles = new HashSet<UserRole>(customerDAO.getRolesByUsername(s));
 
         Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
 
-        for (UserRole role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getRole()));
-        }
+        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 
-        return new User(customer.getUsername(),
+        /*for (UserRole role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getRole()));
+        }*/
+
+        return new User(
+                customer.getUsername(),
                 customer.getPassword(),
+                //"LizardKing",
+                //"jim",
                 true,
                 true,
                 true,

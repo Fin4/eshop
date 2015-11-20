@@ -18,7 +18,7 @@ public class Customer {
 
     private Set<Order> orders;
 
-    private Set<UserRole> roles;
+    private Set<UserRole> roles = new HashSet<UserRole>(0);
 
     //@Id
     //@GeneratedValue(strategy = GenerationType.AUTO)

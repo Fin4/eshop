@@ -16,22 +16,24 @@ import java.io.Serializable;
 
 @Component
 @ManagedBean(name = "loginBean")
-@SessionScoped
+@RequestScoped
 public class LoginBean implements Serializable {
 
-    private String userName;
-    private String password;
+    private String username = null;
+    private String password = null;
 
-    @ManagedProperty("#{authenticationManager}")
-    //@Autowired
-    private AuthenticationManager authenticationManager;
+    //@ManagedProperty("#{authenticationManager}")
+    @Autowired
+    private transient AuthenticationManager authenticationManager = null;
 
     public String login() {
         try{
-            Authentication request = new UsernamePasswordAuthenticationToken(this.userName, this.password);
+            Authentication request = new UsernamePasswordAuthenticationToken(this.getUsername(), this.getPassword());
             Authentication result = authenticationManager.authenticate(request);
             SecurityContextHolder.getContext().setAuthentication(result);
+
         } catch (AuthenticationException e) {
+
             e.printStackTrace();
             return "incorrect";
         }
@@ -43,12 +45,12 @@ public class LoginBean implements Serializable {
         return "loggedout";
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String username) {
-        this.userName = username;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

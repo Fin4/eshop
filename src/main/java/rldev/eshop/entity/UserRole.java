@@ -4,14 +4,14 @@ public class UserRole {
 
     private Long id;
     private String role;
-    private Customer user;
+    private String username;
 
-    public Customer getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser(Customer user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Long getId() {
@@ -33,17 +33,18 @@ public class UserRole {
     public UserRole() {
     }
 
-    public UserRole(Long id, String role, Customer user) {
+    public UserRole(Long id, String role, String username) {
         this.id = id;
         this.role = role;
-        this.user = user;
+        this.username = username;
     }
 
     @Override
     public String toString() {
         return "UserRole{" +
                 "id=" + id +
-                ", role='" + role +
+                ", role='" + role + '\'' +
+                ", username='" + username + '\'' +
                 '}';
     }
 }

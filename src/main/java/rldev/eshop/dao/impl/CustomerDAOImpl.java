@@ -42,18 +42,12 @@ public class CustomerDAOImpl extends AbstractDAO implements CustomerDAO {
         String customerQuery = "from rldev.eshop.entity.Customer as customer where customer.username =:username";
         Customer customer = (Customer) getSessionFactory().createQuery(customerQuery).setParameter("username", username).uniqueResult();
 
-        Set roles = new HashSet<UserRole>();
-        roles.add(new UserRole((long) 1, "ROLE_CUSTOMER", customer));
-        roles.add(new UserRole((long) 2, "ROLE_ADMIN", customer));
-        customer.setRoles(roles);
-
-        //customer.setRoles(new HashSet<UserRole>(getRolesByUserId(customer.getId())));
         return customer;
     }
 
-    public List getRolesByUserId(Long userId) {
+    public List getRolesByUsername(String username) {
 
-        String roleQuery = "from rldev.eshop.entity.UserRole as roles where role.user.id =:id";
-        return getSessionFactory().createQuery(roleQuery).setParameter("id", userId).list();
+        String roleQuery = "from rldev.eshop.entity.UserRole as role where role.username =:username";
+        return getSessionFactory().createQuery(roleQuery).setParameter("username", username).list();
     }
 }

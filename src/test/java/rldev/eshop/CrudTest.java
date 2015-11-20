@@ -140,6 +140,7 @@ public class CrudTest extends Assert {
         orderService.save(order);
     }
 
+    @Ignore
     @Test
     public void testFindByUsername() {
         Customer customer = customerService.findByUsername("atticus");
@@ -149,8 +150,8 @@ public class CrudTest extends Assert {
     @Ignore
     @Test
     public void loadUserSecurityTest() {
-        String s = customerDetailsService.loadUserByUsername("atticus").getPassword();
-        assertTrue(s.equals("pass"));
+        String s = customerDetailsService.loadUserByUsername("LizardKing").getPassword();
+        assertTrue(s.equals("jim"));
     }
 
     @Ignore
@@ -161,17 +162,25 @@ public class CrudTest extends Assert {
         }
     }
 
-    @Ignore
+    //@Ignore
     @Test
     public void loginBeanTest() {
-        loginBean.setUserName("atticus");
-        loginBean.setPassword("pass");
+        loginBean.setUsername("LizardKing");
+        loginBean.setPassword("jim");
         System.out.println(loginBean.login());
     }
 
     @Ignore
     @Test
     public void getRolesByUserIdTest() {
-        System.out.println(customerDAO.getRolesByUserId((long) 1));
+        System.out.println(customerDAO.getRolesByUsername("LizardKing"));
+    }
+
+    @Ignore
+    @Test
+    public void findUserByUsername() {
+        String username = customerDAO.findByUsername("LizardKing").getUsername();
+        System.out.println(customerDAO.findByUsername("LizardKing"));
+        assertTrue(username.equals("LizardKing"));
     }
 }

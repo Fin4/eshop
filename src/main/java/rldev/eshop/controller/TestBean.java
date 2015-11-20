@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import rldev.eshop.dao.CustomerDAO;
 import rldev.eshop.entity.Customer;
+import rldev.eshop.service.CustomerService;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -14,9 +15,9 @@ import java.util.List;
 @SessionScoped
 public class TestBean {
 
-    @Autowired private CustomerDAO customerDAO;
+    @Autowired private CustomerService customerService;
 
     public List<Customer> getCustomers() {
-        return customerDAO.readAll();
+        return customerService.readAll();
     }
 }

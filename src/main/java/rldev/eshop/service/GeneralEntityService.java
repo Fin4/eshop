@@ -1,5 +1,7 @@
 package rldev.eshop.service;
 
+import org.springframework.security.access.annotation.Secured;
+
 import java.util.List;
 
 public interface GeneralEntityService<T> {
@@ -12,5 +14,6 @@ public interface GeneralEntityService<T> {
 
     T readById(Long id);
 
+    @Secured("ROLE_ADMIN")
     List<T> readAll();
 }
